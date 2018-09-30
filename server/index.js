@@ -2,29 +2,29 @@ const express = require('express');
 const path = require('path');
 const {User} = require('./user.js');
 const {Article} = require('./article.js');
+const bodyParser = require('body-parser')
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const user_rec = new User();
+const article_rec = new Article();
 app.use(express.static(path.join(__dirname, '..', 'build/')));
-
+app.use(bodyParser());
 // if you need api routes add them here
 
-app.get('/api/:class_name/:action*?/:id*?', (req, res) => {
+app.post('/api/:class_name/:action*?/:id*?', (req, res) => {
 	let result = "";
 	switch (req.params.class_name) {
 		case "users":
-			let user_rec = new User();
-			result = user_rec[req.params.action]();
+			result = user_rec[req.params.action](req.body, (data) => res.send(data));
 			break;
 		case "articles":
-			let article_rec = new Article();
-			result = article_rec[req.params.action]();
+			result = article_rec[req.params.action](req.body, (data) => res.send(data));
 			break;
 		default:
-			console.log("Nothing to see here.");
+			res.send("Nothing to see here.");
 	}
-	res.send(result);
 });
 
 app.get('*', (req, res) => {
@@ -34,3 +34,4 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
 	console.log(`Check out the app at http://localhost:${PORT}`);
 });
+

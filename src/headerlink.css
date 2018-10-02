@@ -1,0 +1,19 @@
+.header_link {
+	cursor: pointer;
+	height: 100%;
+	padding: 8px 12px;
+	text-transform: uppercase;
+	transition: 125ms ease;
+}
+.header_link:hover {
+	background: rgba(127,127,127,0.5);
+}
+
+.header_link_bar {
+	display: inline-flex;
+	justify-content: flex-end;
+	padding-right: 20px;
+	position: absolute;
+	right: 0;
+	width: 70%;
+}

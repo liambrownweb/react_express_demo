@@ -1,0 +1,18 @@
+.app_body {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 38px;
+}
+
+.body_view {
+	background-color: #5555AA;
+	height: 100%;
+	width: 100%;
+}
+
+.list_row {
+	border-bottom: rgba(0, 0, 0, 0.5);
+	display: inline-flex;
+}

@@ -1,0 +1,10 @@
+.ui_button {
+	background-color: #444455;
+	box-shadow: 1px 1px 3px black;
+	padding: 8px 16px;
+	transition: 125ms ease;
+}
+
+.ui_button:active {
+	box-shadow: 0px 0px 1px black;
+}

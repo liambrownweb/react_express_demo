@@ -11,6 +11,11 @@ const user_rec = new User();
 const article_rec = new Article();
 app.use(express.static(path.join(__dirname, '..', 'build/')));
 app.use(bodyParser());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 // if you need api routes add them here
 
 app.post('/api/:class_name/:action*?/:id*?', (req, res) => {

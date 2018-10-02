@@ -8,8 +8,12 @@ class Article {
 		this.db = await sqlite.open('./database.sqlite');
 		this.db.all(`CREATE TABLE IF NOT EXISTS '${this.table}' (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT)`);
 	}
-	async list (callback) {
-		let data = await this.db.all(`SELECT * FROM ${this.table}`);
+	async list (params, callback) {
+		let query_string = `SELECT * FROM ${this.table}`;
+		if (params.hasOwnProperty("limit")) {
+			query_string += ` LIMIT ${params.limit}`;
+		}
+		let data = await this.db.all(query_string);
 		callback(data);
 	}
 	async create (article_data, callback) {

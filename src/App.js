@@ -21,7 +21,9 @@ class App extends Component {
 	}
 
 	refreshArticlesCallback (data) {
-		console.log(data);
+		if ("articles" == this.state.view) {
+			this.body.setArticleList(data);
+		}
 	}
 
 	render() {

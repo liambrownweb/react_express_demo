@@ -14,5 +14,15 @@
 
 .list_row {
 	border-bottom: rgba(0, 0, 0, 0.5);
-	display: inline-flex;
+}
+
+.snippet {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	max-width: 80ch;
+}
+
+td > .ui_button {
+	padding: 4px 8px;
 }

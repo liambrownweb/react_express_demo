@@ -9,22 +9,61 @@ class UserView extends Component {
 }
 
 class ArticleView extends Component {
-	parseArticleList () {
-		let list = (
-		<div className="list_row">
-			<div>Title</div>
-			<div>Short text</div>
-			<div><Button text="edit"/></div>
-			<div><Button text="delete"/></div>
-			<div><Button text="share"/></div>
-		</div>);
-		return list;
+	constructor () {
+		super();
+		this.parseArticleList = this.parseArticleList.bind(this);
+		this.handleRowClick = this.handleRowClick.bind(this);
+		this.editArticle = this.editArticle.bind(this);
+		this.deleteArticle = this.deleteArticle.bind(this);
+		this.shareArticle = this.shareArticle.bind(this);
 	}
+
+	deleteArticle (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log("delete!");
+	}
+
+	editArticle (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log("edit!");
+	}
+
+	shareArticle (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log("share!");
+	}
+
+	handleRowClick (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.log("Row Clicked!");
+	}
+
+	parseArticleList () {
+		if (Array.isArray(this.props.articles)) {
+			let list = this.props.articles.map((article) => (
+			<tr className="list_row" onClick={this.handleRowClick}>
+				<td>{article.title}</td>
+				<td className="snippet">{article.body}</td>
+				<td><Button text="edit" dataId={article.id} onClick={this.editArticle}/></td>
+				<td><Button text="delete" dataId={article.id} onClick={this.deleteArticle}/></td>
+				<td><Button text="share" dataId={article.id} onClick={this.shareArticle}/></td>
+			</tr>));
+			return list;
+		} else {
+			return null;
+		}
+	}
+
 	render () {
 		return (
 			<div className="body_view">
-				Articles
+				<table>
 				{this.parseArticleList()}
+				</table>
 				<Button text="Add"/>
 			</div>);
 	}
@@ -41,6 +80,11 @@ class AppBody extends Component {
 			"articles": ArticleView,
 			"users": UserView
 		};
+		this.setArticleList = this.setArticleList.bind(this);
+	}
+
+	setArticleList (data) {
+		this.setState({"articles": data});
 	}
 
 	setView (view_name) {
@@ -52,7 +96,7 @@ class AppBody extends Component {
 	render () {
 		let current_view = null;
 		if ("articles" === this.state.view) {
-			current_view = <ArticleView/>;
+			current_view = <ArticleView articles={this.state.articles || []}/>;
 		} else if ("users" === this.state.view) {
 			current_view = <UserView/>;
 		}

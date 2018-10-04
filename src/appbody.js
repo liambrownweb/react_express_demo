@@ -11,29 +11,45 @@ class UserView extends Component {
 class ArticleView extends Component {
 	constructor () {
 		super();
+		this.state = {};
 		this.parseArticleList = this.parseArticleList.bind(this);
 		this.handleRowClick = this.handleRowClick.bind(this);
 		this.editArticle = this.editArticle.bind(this);
 		this.deleteArticle = this.deleteArticle.bind(this);
 		this.shareArticle = this.shareArticle.bind(this);
+		this.duplicateArticle = this.duplicateArticle.bind(this);
+		this.updateArticle = this.updateArticle.bind(this);
+		this.subscribeViewToModel = this.subscribeViewToModel.bind(this);
+		this.refresh = this.refresh.bind(this);
 	}
 
 	deleteArticle (event) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log("delete!");
+		this.model.deleteArticle(event.currentTarget.getAttribute('data-id'), this.refresh);
+	}
+
+	duplicateArticle (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.model.duplicateArticle(event.currentTarget.getAttribute('data-id'), this.refresh);
 	}
 
 	editArticle (event) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log("edit!");
 	}
 
 	shareArticle (event) {
 		event.preventDefault();
 		event.stopPropagation();
 		console.log("share!");
+	}
+
+	updateArticle (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		
 	}
 
 	handleRowClick (event) {
@@ -43,12 +59,15 @@ class ArticleView extends Component {
 	}
 
 	parseArticleList () {
-		if (Array.isArray(this.props.articles)) {
-			let list = this.props.articles.map((article) => (
+		if (!this.model) return;
+		let articles = this.model.getArticle();
+		if (Array.isArray(articles)) {
+			let list = articles.map((article) => (
 			<tr className="list_row" onClick={this.handleRowClick}>
 				<td>{article.title}</td>
 				<td className="snippet">{article.body}</td>
 				<td><Button text="edit" dataId={article.id} onClick={this.editArticle}/></td>
+				<td><Button text="duplicate" dataId={article.id} onClick={this.duplicateArticle}/></td>
 				<td><Button text="delete" dataId={article.id} onClick={this.deleteArticle}/></td>
 				<td><Button text="share" dataId={article.id} onClick={this.shareArticle}/></td>
 			</tr>));
@@ -66,6 +85,14 @@ class ArticleView extends Component {
 				</table>
 				<Button text="Add"/>
 			</div>);
+	}
+
+	refresh () {
+		this.setState({"view_version": this.state.view_version + 1});
+	}
+
+	subscribeViewToModel () {
+		this.model.subscribe(this);
 	}
 }
 
@@ -87,6 +114,11 @@ class AppBody extends Component {
 		this.setState({"articles": data});
 	}
 
+	setModel (model) {
+		this.view.model = model;
+		this.view.subscribeViewToModel();
+	}
+
 	setView (view_name) {
 		if (this.views.hasOwnProperty(view_name)) {
 			this.setState({"view": view_name});
@@ -96,7 +128,7 @@ class AppBody extends Component {
 	render () {
 		let current_view = null;
 		if ("articles" === this.state.view) {
-			current_view = <ArticleView articles={this.state.articles || []}/>;
+			current_view = <ArticleView ref={(e) => this.view = e}/>;
 		} else if ("users" === this.state.view) {
 			current_view = <UserView/>;
 		}

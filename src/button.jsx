@@ -15,7 +15,7 @@ class Button extends Component {
 
 	render () {
 		return (
-			<div className="ui_button" onClick={this.handleClick}>
+			<div className="ui_button" onClick={this.handleClick} data-id={this.props.dataId}>
 				{this.props.text}
 			</div>
 		);

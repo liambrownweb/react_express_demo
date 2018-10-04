@@ -38,9 +38,14 @@ class App extends Component {
 						<HeaderLink title="users" onClick={this.switchView}/>
 					</HeaderLinkBar>
 				</header>
-				<AppBody ref={(e) => this.body = e} view={this.state.view} />
+				<AppBody ref={(e) => this.attachViewToModel(e)} view={this.state.view} />
 			</div>
 		);
+	}
+
+	attachViewToModel (view) {
+		this.body = view;
+		view.setModel(this.model);
 	}
 
 	switchView (event, target_props) {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './appbody.css';
 import {Button} from './button.jsx';
+import {Edit} from './edit.jsx';
 
 class UserView extends Component {
 	render () {
@@ -38,6 +39,8 @@ class ArticleView extends Component {
 	editArticle (event) {
 		event.preventDefault();
 		event.stopPropagation();
+		let id = event.currentTarget.getAttribute('data-id');
+		this.setState({'editing': id});
 	}
 
 	shareArticle (event) {

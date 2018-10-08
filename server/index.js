@@ -1,14 +1,23 @@
 const express = require('express');
+const sqlite = require('sqlite');
 const path = require('path');
 const {User} = require('./user.js');
 const {Article} = require('./article.js');
+const {Share} = require('./share.js');
 const bodyParser = require('body-parser')
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const user_rec = new User();
-const article_rec = new Article();
+var share_rec, user_rec, article_rec;
+
+sqlite.open('./database.sqlite')
+	.then((db) => {
+	share_rec = new Share(db);
+	user_rec = new User();
+	article_rec = new Article(db);
+});
+
 app.use(express.static(path.join(__dirname, '..', 'build/')));
 app.use(bodyParser());
 app.use(function(req, res, next) {

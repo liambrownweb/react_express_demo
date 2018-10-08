@@ -1,12 +1,11 @@
-const sqlite = require('sqlite');
 class Article {
-	constructor () {
-		this.createConnection();
+	constructor (db) {
+		this.db = db;
 		this.table = 'articles';
+		this.createConnection();
 	}
 	
 	async createConnection () {
-		this.db = await sqlite.open('./database.sqlite');
 		this.db.all(`CREATE TABLE IF NOT EXISTS '${this.table}' (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT)`);
 	}
 	
